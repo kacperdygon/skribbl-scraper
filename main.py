@@ -1,48 +1,41 @@
+"""main"""
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 import pyperclip
+from app.clicker import ButtonClicker
+from app.helpers import switch_window
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get('https://skribbl.io/')
 
-wait = WebDriverWait(driver, 10)
+button_clicker = ButtonClicker(driver, 10)
 
-accept_cookies_button = wait.until(
-    EC.element_to_be_clickable((By.CSS_SELECTOR, ".fc-button.fc-cta-consent.fc-primary-button"))
-)
+# #cookies
+button_clicker.click_button(By.CSS_SELECTOR, ".fc-button.fc-cta-consent.fc-primary-button")
 
-accept_cookies_button.click()
+#create
+button_clicker.click_button(By.CLASS_NAME, "button-create")
 
-create_game_button = wait.until(
-    EC.element_to_be_clickable((By.CLASS_NAME, "button-create"))
-)
-
-create_game_button.click()
-
-get_invite_button = wait.until(
-    EC.element_to_be_clickable((By.ID, "button-invite"))
-)
-
-get_invite_button.click()
+#invite
+button_clicker.click_button(By.ID, "button-invite")
 
 invite_link = pyperclip.paste()
 
 driver.execute_script(f"window.open('{invite_link}', '_blank');")
-tabs = driver.window_handles
-driver.switch_to.window(tabs[1])
 
-play_game_button = wait.until(
-    EC.element_to_be_clickable((By.CLASS_NAME, "button-play"))
-)
+switch_window(driver, 1)
 
-play_game_button.click()
+#join
+button_clicker.click_button(By.CLASS_NAME, "button-play")
 
-driver.switch_to.window(tabs[0])
+switch_window(driver, 0)
+
+#play game
+# button_clicker.click_button(By.ID, "button-start-game")
 
 input('Naciśnij coś')
 driver.quit()
