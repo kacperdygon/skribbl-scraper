@@ -1,0 +1,8 @@
+{
+    "lobby_settings": {
+        "language": "Polish",
+        "rounds": 10,
+        "word_count": 5
+    },
+    "browser": "firefox"
+}
