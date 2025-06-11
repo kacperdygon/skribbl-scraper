@@ -1,5 +1,5 @@
 """main"""
-from app.web_driver import WebDriverManager
+from app.utils.web_driver import WebDriverManager
 from app.skribbl_scraper import SkribblScraper
 from app.globals import load_config
 
@@ -11,11 +11,11 @@ browser_profile_path = config["browser_profile_path"]
 
 driver = WebDriverManager(selected_browser, browser_profile_path).get_driver()
 
-bot = SkribblScraper(driver)
+bot = SkribblScraper(driver, config)
 
 bot.create_and_join_lobby()
 bot.configure_lobby()
 bot.start_game()
 
-input('Naciśnij coś')
+input('Click enter to continue...')
 driver.quit()

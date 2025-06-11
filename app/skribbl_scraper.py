@@ -3,16 +3,18 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 import pyperclip
-from app.button_clicker import ButtonClicker
-from app.window_manager import WindowManager
+from app.utils.button_clicker import ButtonClicker
+from app.utils.window_manager import WindowManager
 from app.lobby_configurator import LobbyConfigurator
+from app.game_loop import GameLoop
 
 class SkribblScraper:
     """Handles everything"""
-    def __init__(self, driver: WebDriver):
+    def __init__(self, driver: WebDriver, config: dict):
         self.driver = driver
+        self.config = config
         self.url = 'https://skribbl.io/'
-        self.button_clicker = ButtonClicker(driver, 5)
+        self.button_clicker = ButtonClicker(driver, config)
         self.window_manager = WindowManager(driver)
 
     def create_and_join_lobby(self):
@@ -36,9 +38,12 @@ class SkribblScraper:
 
     def configure_lobby(self):
         """Handles lobby configuration with LobbyConfigurator"""
-        lobby_configurator = LobbyConfigurator(self.driver)
+        lobby_configurator = LobbyConfigurator(self.driver, self.config)
         lobby_configurator.apply_settings()
 
     def start_game(self):
         """Handles game start"""
-        self.button_clicker.click_button(By.ID, "button-start-game") # start game
+        self.button_clicker.click_button(By.ID, 'button-start-game') # start game
+        game_loop = GameLoop(self.driver, self.button_clicker, self.window_manager, self.config)
+        game_loop.start()
+        
