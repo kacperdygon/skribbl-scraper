@@ -15,6 +15,7 @@ bot = SkribblScraper(driver)
 
 bot.create_and_join_lobby()
 bot.configure_lobby()
+bot.start_game()
 
 input('Naciśnij coś')
 driver.quit()

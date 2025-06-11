@@ -1,9 +1,8 @@
 """Module with class for handling lobby configuration"""
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote.webdriver import WebDriver
 from app.globals import load_config
+from app.button_clicker import ButtonClicker
 
 class LobbyConfigurator:
     """Class loading and lobby configuration and setting it"""
@@ -19,9 +18,5 @@ class LobbyConfigurator:
 
     def __use_select(self, element_id, index):
         if index in self.config:
-            select_element = self.driver.find_element(By.ID, element_id)
-            select = Select(select_element)
-            try:
-                select.select_by_visible_text(str(self.config[index]))
-            except NoSuchElementException:
-                print('Wrong {index} value')
+            button_clicker = ButtonClicker(self.driver, 3)
+            button_clicker.click_select(By.ID, element_id, self.config[index])

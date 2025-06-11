@@ -1,5 +1,4 @@
 """File with web driver singleton"""
-import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
@@ -32,12 +31,9 @@ class WebDriverManager:
             self.driver = webdriver.Chrome(service=service, options=options)
         elif browser == "firefox":
             options = FirefoxOptions()
-            if os.path.exists(browser_profile_path):
-                print('sigma')
             if browser_profile_path:
                 options.add_argument("-profile")
                 options.add_argument(browser_profile_path)
-            print(options.arguments)
             service = FirefoxService(GeckoDriverManager().install())
             self.driver = webdriver.Firefox(service=service, options=options)
         else:
