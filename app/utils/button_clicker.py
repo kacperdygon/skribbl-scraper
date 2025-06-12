@@ -16,15 +16,20 @@ class ButtonClicker:
 
     @staticmethod
     def handle_popup(func):
-        """decorator """
-        def wrapper(self, *args, **kwargs):
+        """decorator"""
+        def wrapper(self: 'ButtonClicker', *args, **kwargs):
 
-            if self.config["check_for_popup"]:
-                ad_handler = AdHandler(self.driver)
-                ad_handler.check_and_close_ads()
+            self.check_and_close_popup()
 
             return func(self, *args, **kwargs)
         return wrapper
+
+    def check_and_close_popup(self):
+        """Handles closing popup with AdHandler"""
+        if self.config["check_for_popup"]:
+            ad_handler = AdHandler(self.driver)
+            ad_handler.check_and_close_ads()
+
 
     @handle_popup
     def click_button(self, by_selector, selector):
@@ -42,6 +47,8 @@ class ButtonClicker:
             print('Click intercepted')
             return False
 
+    
+
     @handle_popup
     def click_select(self, by_selector, selector, value):
         """Like click_button but works for select"""
@@ -50,12 +57,15 @@ class ButtonClicker:
                 EC.element_to_be_clickable((by_selector, selector))
             )
             select = Select(element)
+            self.check_and_close_popup()
             select.select_by_visible_text(str(value))
             return True
         except TimeoutException:
             print(f'no such element: {by_selector}, {selector}')
             return False
 
+
+    @handle_popup
     def use_input(self, by_selector, selector, value):
         """Like click_select but works for input"""
         try:

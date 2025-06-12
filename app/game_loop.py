@@ -5,15 +5,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from app.utils.button_clicker import ButtonClicker
 from app.utils.window_manager import WindowManager
+from app.word_saver import WordSaver
 
 class GameLoop:
     """Manages game loop"""
     def __init__(self, driver: WebDriver, button_clicker: ButtonClicker,
-                 window_manager: WindowManager, config):
+                 window_manager: WindowManager, word_saver: WordSaver, config):
         self.config = config
         self.driver = driver
         self.button_clicker = button_clicker
         self.window_manager = window_manager
+        self.word_saver = word_saver
 
     def start(self):
         """Loops through whole game by calling loop_through_round"""
@@ -56,6 +58,8 @@ class GameLoop:
         words = []
         for element in elements:
             words.append(element.text)
+        self.word_saver.save_words(words)
+
         self.button_clicker.click_button(By.CSS_SELECTOR, '.words.show .word')
 
         return words[0]

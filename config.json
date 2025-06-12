@@ -8,5 +8,5 @@
     "browser": "chrome",
     "browser_profile_path": "",
     "check_for_popup": true,
-    "timeout": 10
+    "timeout": 15
 }
