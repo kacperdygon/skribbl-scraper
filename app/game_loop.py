@@ -6,16 +6,19 @@ from selenium.webdriver.common.by import By
 from app.utils.button_clicker import ButtonClicker
 from app.utils.window_manager import WindowManager
 from app.word_saver import WordSaver
+from app.scrape_speed_tracker import ScrapeSpeedTracker
 
 class GameLoop:
     """Manages game loop"""
     def __init__(self, driver: WebDriver, button_clicker: ButtonClicker,
-                 window_manager: WindowManager, word_saver: WordSaver, config):
+                 window_manager: WindowManager, word_saver: WordSaver,
+                 config):
         self.config = config
         self.driver = driver
         self.button_clicker = button_clicker
         self.window_manager = window_manager
         self.word_saver = word_saver
+        self.scrape_speed_tracker = None
 
     def start(self):
         """Loops through whole game by calling loop_through_round"""
@@ -27,7 +30,6 @@ class GameLoop:
 
     def loop_through_round(self):
         """Loops through round by calling loop through turn for every player"""
-        print('looping through round')
         player_count = self.config["lobby_settings"]["player_count"]
         i = player_count - 1 # currently drawing player
         while i  > -1:
@@ -38,7 +40,6 @@ class GameLoop:
     def loop_through_turn(self, drawing_player, player_count, current_word):
         """Loops through turn and calls guess_word for every player that
         is not currently drawing"""
-        print(f'looping through turn for drawing player {drawing_player}')
 
         # i - currently guessing player
         for i in range(player_count):
@@ -49,7 +50,6 @@ class GameLoop:
     def load_avaible_words(self, drawing_player):
         """Switches tab and loads avaible words for certain player,
         returns chosen word (first one from the avaible ones),"""
-        print(f'loading avaible words for player {drawing_player}')
         self.window_manager.switch_window(drawing_player)
         wait = WebDriverWait(self.driver, self.config["timeout"])
         # check if words were hidden yet so next statement won't load words from previous round
@@ -64,12 +64,18 @@ class GameLoop:
             words.append(element.text)
         self.word_saver.save_words(words)
 
+        if self.scrape_speed_tracker:
+            self.scrape_speed_tracker.record(self.config["lobby_settings"]["word_count"])
+
         self.button_clicker.click_button(By.CSS_SELECTOR, '.words.show .word')
 
         return words[0]
 
     def guess_word(self, word, guessing_player):
         """Switches tab and guesses word for certain player"""
-        print(f'guessing word {word} for player {guessing_player}')
         self.window_manager.switch_window(guessing_player)
         self.button_clicker.use_input(By.CSS_SELECTOR, '#game-chat input', word)
+
+    def set_scrape_speed_tracker(self, scrape_speed_tracker: ScrapeSpeedTracker):
+        """Sets scrape speed tracker for tests"""
+        self.scrape_speed_tracker = scrape_speed_tracker

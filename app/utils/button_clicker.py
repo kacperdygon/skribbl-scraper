@@ -47,7 +47,6 @@ class ButtonClicker:
             print('Click intercepted')
             return False
 
-    
 
     @handle_popup
     def click_select(self, by_selector, selector, value):

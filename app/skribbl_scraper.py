@@ -1,5 +1,6 @@
 """Good bot"""
 import sqlite3
+from itertools import count
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 import pyperclip
@@ -9,6 +10,7 @@ from app.lobby_configurator import LobbyConfigurator
 from app.game_loop import GameLoop
 from app.word_saver import WordSaver
 from app.bot_joiner import BotJoiner
+from app.scrape_speed_tracker import ScrapeSpeedTracker
 
 class SkribblScraper:
     """Handles everything"""
@@ -49,10 +51,22 @@ class SkribblScraper:
         word_saver = WordSaver(self.database_connection, self.config)
         button_clicker = ButtonClicker(self.driver, self.config)
 
-        while True:
+        if self.config["start_tracker"]:
+            scrape_speed_tracker = ScrapeSpeedTracker()
+            scrape_speed_tracker.start()
+
+        iterations = self.config["iterations"]
+        iteration_source = count(1) if iterations == 'inf' else range(iterations)
+
+        for _ in iteration_source:
             print('starting game...')
             self.window_manager.switch_window(0)
             button_clicker.click_button(By.ID, 'button-start-game') # start game
             game_loop = GameLoop(self.driver, button_clicker, self.window_manager,
                                  word_saver, self.config)
+            if scrape_speed_tracker:
+                game_loop.set_scrape_speed_tracker(scrape_speed_tracker)
             game_loop.start()
+
+        if scrape_speed_tracker:
+            scrape_speed_tracker.report()

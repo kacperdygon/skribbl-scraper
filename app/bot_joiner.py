@@ -8,7 +8,8 @@ from app.utils.button_clicker import ButtonClicker
 class BotJoiner():
     """Class handling joining game with other bots"""
 
-    def __init__(self, window_manager: WindowManager, driver: WebDriver, config: dict, join_link: str):
+    def __init__(self, window_manager: WindowManager, driver: WebDriver,
+                 config: dict, join_link: str):
         self.window_manager = window_manager
         self.driver = driver
         self.config = config

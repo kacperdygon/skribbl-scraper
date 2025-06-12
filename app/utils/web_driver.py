@@ -43,3 +43,9 @@ class WebDriverManager:
     def get_driver(self) -> WebDriver:
         """Returns driver"""
         return self.driver
+
+    def reload_driver(self, browser, browser_profile_path):
+        """Quits from driver if there is any and inits new one"""
+        if self.driver:
+            self.driver.quit()
+        self._init_driver(browser, browser_profile_path)

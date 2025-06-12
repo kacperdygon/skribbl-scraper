@@ -10,7 +10,8 @@ browser_profile_path = config["browser_profile_path"]
 
 connection = sqlite3.connect('words')
 
-driver = WebDriverManager(selected_browser, browser_profile_path).get_driver()
+web_driver_manager = WebDriverManager(selected_browser, browser_profile_path)
+driver = web_driver_manager.get_driver()
 
 bot = SkribblScraper(driver, connection, config)
 
@@ -19,5 +20,8 @@ bot.configure_lobby()
 bot.join_lobby_with_bots()
 bot.start_game()
 
+
 connection.close()
 driver.quit()
+
+input('Click enter to continue...')

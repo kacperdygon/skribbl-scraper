@@ -1,12 +1,14 @@
 {
     "lobby_settings": {
-        "language": "Polish",
+        "language": "English",
         "rounds": 10,
         "word_count": 5,
-        "player_count": 10
+        "player_count": 2
     },
     "browser": "chrome",
     "browser_profile_path": "",
-    "check_for_popup": true,
-    "timeout": 15
+    "check_for_popups": true,
+    "timeout": 15,
+    "start_tracker": false,
+    "iterations": "inf"
 }
