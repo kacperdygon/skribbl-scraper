@@ -51,7 +51,11 @@ class GameLoop:
         returns chosen word (first one from the avaible ones),"""
         print(f'loading avaible words for player {drawing_player}')
         self.window_manager.switch_window(drawing_player)
-        wait = WebDriverWait(self.driver, 10)
+        wait = WebDriverWait(self.driver, self.config["timeout"])
+        # check if words were hidden yet so next statement won't load words from previous round
+        wait.until(lambda d: all(
+            not e.is_displayed() for e in d.find_elements(By.CSS_SELECTOR, '.words.show .word')
+            ))
         elements = wait.until(
             EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.words.show .word'))
             )
@@ -68,5 +72,4 @@ class GameLoop:
         """Switches tab and guesses word for certain player"""
         print(f'guessing word {word} for player {guessing_player}')
         self.window_manager.switch_window(guessing_player)
-        result = self.button_clicker.use_input(By.CSS_SELECTOR, '#game-chat input', word)
-        print(f'Guess sent: {result}')
+        self.button_clicker.use_input(By.CSS_SELECTOR, '#game-chat input', word)

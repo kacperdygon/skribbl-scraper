@@ -1,9 +1,9 @@
 {
     "lobby_settings": {
         "language": "Polish",
-        "rounds": 2,
+        "rounds": 10,
         "word_count": 5,
-        "player_count": 3
+        "player_count": 10
     },
     "browser": "chrome",
     "browser_profile_path": "",

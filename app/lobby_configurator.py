@@ -11,7 +11,7 @@ class LobbyConfigurator:
 
     def apply_settings(self):
         """Applies settings in the lobby"""
-        self.__use_select('item-settings-slots', 'player-count')
+        self.__use_select('item-settings-slots', 'player_count')
         self.__use_select('item-settings-language', 'language')
         self.__use_select('item-settings-rounds', 'rounds')
         self.__use_select('item-settings-wordcount', 'word_count')
