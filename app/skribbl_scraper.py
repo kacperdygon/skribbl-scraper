@@ -43,7 +43,8 @@ class SkribblScraper:
 
     def start_game(self):
         """Handles game start"""
-        self.button_clicker.click_button(By.ID, 'button-start-game') # start game
-        game_loop = GameLoop(self.driver, self.button_clicker, self.window_manager, self.config)
-        game_loop.start()
-        
+        while True:
+            self.window_manager.switch_window(0)
+            self.button_clicker.click_button(By.ID, 'button-start-game') # start game
+            game_loop = GameLoop(self.driver, self.button_clicker, self.window_manager, self.config)
+            game_loop.start()

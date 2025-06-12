@@ -39,7 +39,6 @@ class AdHandler:
         """Looks for button in current frame and clicks it"""
         try:
             button = self.driver.find_element(By.ID, 'dismiss-button')
-            print(button.tag_name)
             button.click()
             return True
         except NoSuchElementException:

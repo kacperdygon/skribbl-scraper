@@ -16,37 +16,43 @@ class GameLoop:
         self.window_manager = window_manager
 
     def start(self):
+        """Loops through whole game by calling loop_through_round"""
         rount_count = self.config["lobby_settings"]["rounds"]
-        i = 0
-        while i < rount_count:
+        # current round
+        for i in range(rount_count):
             self.loop_through_round()
             i = i + 1
 
     def loop_through_round(self):
+        """Loops through round by calling loop through turn for every player"""
+        print('looping through round')
         player_count = self.config["lobby_settings"]["player_count"]
         i = player_count - 1 # currently drawing player
         while i  > -1:
-            self.window_manager.switch_window(i)
-            current_word = self.load_avaible_words()
+            current_word = self.load_avaible_words(i)
             self.loop_through_turn(i, player_count, current_word)
             i = i - 1
 
-    def loop_through_turn(self, current_player, player_count, current_word):
+    def loop_through_turn(self, drawing_player, player_count, current_word):
+        """Loops through turn and calls guess_word for every player that
+        is not currently drawing"""
+        print(f'looping through turn for drawing player {drawing_player}')
 
-        i = 0 # currently guessing player
-        while i < player_count:
-            if i == current_player:
-                break
-            self.window_manager.switch_window(i)
-            self.guess_word(current_word)
-            i = i + 1
+        # i - currently guessing player
+        for i in range(player_count):
+            if i == drawing_player:
+                continue
+            self.guess_word(current_word, i)
 
-    def load_avaible_words(self):
+    def load_avaible_words(self, drawing_player):
+        """Switches tab and loads avaible words for certain player,
+        returns chosen word (first one from the avaible ones),"""
+        print(f'loading avaible words for player {drawing_player}')
+        self.window_manager.switch_window(drawing_player)
         wait = WebDriverWait(self.driver, 10)
         elements = wait.until(
             EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.words.show .word'))
             )
-        print('located')
         words = []
         for element in elements:
             words.append(element.text)
@@ -54,13 +60,9 @@ class GameLoop:
 
         return words[0]
 
-    def guess_word(self, word):
-        print('word:', word)
-        input()
-        element = self.driver.find_element(By.CSS_SELECTOR, '#game-chat input')
-        print(element.tag_name)
-        print(element.is_displayed(), element.is_enabled())
-
-        input()
-
-        self.button_clicker.use_input(By.CSS_SELECTOR, '#game-chat input', word)
+    def guess_word(self, word, guessing_player):
+        """Switches tab and guesses word for certain player"""
+        print(f'guessing word {word} for player {guessing_player}')
+        self.window_manager.switch_window(guessing_player)
+        result = self.button_clicker.use_input(By.CSS_SELECTOR, '#game-chat input', word)
+        print(f'Guess sent: {result}')

@@ -10,7 +10,6 @@ from app.utils.ad_handler import AdHandler
 class ButtonClicker:
     """Handles clicking buttons"""
     def __init__(self, driver: WebDriver, config: dict):
-        print(config)
         self.wait = WebDriverWait(driver, config["timeout"])
         self.driver = driver
         self.config = config
