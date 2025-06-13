@@ -1,9 +1,11 @@
 """main"""
 import sqlite3
-from app.utils.web_driver import WebDriverManager
+from colorama import init
+from app.web_driver import WebDriverManager
 from app.skribbl_scraper import SkribblScraper
 from app.globals import load_config
 
+init()
 config = load_config()
 selected_browser = config["browser"]
 browser_profile_path = config["browser_profile_path"]

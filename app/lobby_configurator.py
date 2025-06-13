@@ -1,7 +1,7 @@
 """Module with class for handling lobby configuration"""
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
-from app.utils.button_clicker import ButtonClicker
+from app.handlers.button_clicker import ButtonClicker
 
 class LobbyConfigurator:
     """Class loading and lobby configuration and setting it"""

@@ -3,20 +3,19 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from app.utils.button_clicker import ButtonClicker
-from app.utils.window_manager import WindowManager
+from app.handlers.button_clicker import ButtonClicker
+from app.handlers.window_manager import WindowManager
 from app.word_saver import WordSaver
 from app.scrape_speed_tracker import ScrapeSpeedTracker
 
 class GameLoop:
     """Manages game loop"""
     def __init__(self, driver: WebDriver, button_clicker: ButtonClicker,
-                 window_manager: WindowManager, word_saver: WordSaver,
-                 config):
+                 word_saver: WordSaver, config):
         self.config = config
         self.driver = driver
         self.button_clicker = button_clicker
-        self.window_manager = window_manager
+        self.window_manager = WindowManager(driver)
         self.word_saver = word_saver
         self.scrape_speed_tracker = None
 
@@ -49,7 +48,7 @@ class GameLoop:
 
     def load_avaible_words(self, drawing_player):
         """Switches tab and loads avaible words for certain player,
-        returns chosen word (first one from the avaible ones),"""
+        sends them to WordSaver"""
         self.window_manager.switch_window(drawing_player)
         wait = WebDriverWait(self.driver, self.config["timeout"])
         # check if words were hidden yet so next statement won't load words from previous round
@@ -72,7 +71,7 @@ class GameLoop:
         return words[0]
 
     def guess_word(self, word, guessing_player):
-        """Switches tab and guesses word for certain player"""
+        """Switches tab and guesses word"""
         self.window_manager.switch_window(guessing_player)
         self.button_clicker.use_input(By.CSS_SELECTOR, '#game-chat input', word)
 

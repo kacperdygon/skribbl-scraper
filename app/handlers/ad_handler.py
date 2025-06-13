@@ -11,16 +11,21 @@ class AdHandler:
     def check_and_close_ads(self):
         """Checks if there are any ads on a site and closes them"""
         try:
+            # tries to switch to aswift_2
             if not self.__look_and_switch_to_frame('aswift_2'):
                 return False
+            # looks for button in aswift_2
             if self.__look_for_popup_button():
                 return True
+            # there can be another iframe in aswift_2
             self.__look_and_switch_to_frame('ad_iframe')
+            # looks in ad_iframe if switch to it was successful
             if self.__look_for_popup_button():
                 return True
 
             return False
         finally:
+            # returns to parent frame
             self.driver.switch_to.default_content()
 
     def __look_and_switch_to_frame(self, iframe_id):
@@ -43,4 +48,3 @@ class AdHandler:
             return True
         except NoSuchElementException:
             return False
-        

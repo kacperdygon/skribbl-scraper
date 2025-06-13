@@ -31,6 +31,6 @@ class ScrapeSpeedTracker():
         wps = self.get_words_per_second()
         print(f'''[Scraper Stats]
 WPS: {wps:.2f}
-Time: {time.time() - self.start_time:.2f}s 
+Time: {time.time() - self.start_time:.2f}s
 Words {self.total_words}
         ''')

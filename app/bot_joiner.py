@@ -2,18 +2,18 @@
 import time
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
-from app.utils.window_manager import WindowManager
-from app.utils.button_clicker import ButtonClicker
+from app.handlers.window_manager import WindowManager
+from app.handlers.button_clicker import ButtonClicker
 
 class BotJoiner():
     """Class handling joining game with other bots"""
 
-    def __init__(self, window_manager: WindowManager, driver: WebDriver,
+    def __init__(self, driver: WebDriver,
                  config: dict, join_link: str):
-        self.window_manager = window_manager
         self.driver = driver
         self.config = config
         self.join_link = join_link
+        self.window_manager = WindowManager(driver)
 
     def join_all_bots(self):
         """Handles bot joining with loop"""
