@@ -17,17 +17,19 @@ class SkribblScraper:
     def __init__(self, driver: WebDriver, database_connection: sqlite3.Connection, config: dict):
         self.driver = driver
         self.config = config
-        self.url = 'https://skribbl.io/'
         self.database_connection = database_connection
 
     def create_and_join_lobby(self):
         """Creates lobby"""
-        self.driver.get('https://skribbl.io/')
+        url = 'https://skribbl.io/'
+        self.driver.get(url)
 
         button_clicker = ButtonClicker(self.driver, self.config)
 
-        button_clicker.click_button(By.CSS_SELECTOR,
-        ".fc-button.fc-cta-consent.fc-primary-button") # cookies
+        if self.config["check_for_popups"]:
+            button_clicker.click_button(By.CSS_SELECTOR,
+            ".fc-button.fc-cta-consent.fc-primary-button") # cookies
+
         button_clicker.click_button(By.CLASS_NAME, "button-create") # create
         button_clicker.click_button(By.ID, "button-invite") # invite
 

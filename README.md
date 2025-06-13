@@ -64,3 +64,10 @@ python export.py --language polish --export-file list.json
 | `rounds`       | Number of rounds per game (2–10)                                                                                                         |
 | `word_count`   | Number of word choices per round (1–5, no real reason to have less than 5)                                                               |
 | `player_count` | Maximum number of players (bots). Can range from 2 to 15, since more than 15 will fail due to many players connecting from one IP adress |
+
+## Notes
+- Edge doesn't work for some reason, maybe I'll fix it
+- Higher player count doesn't change much (I've recorded 8% performance increase when 15 bots were playing instead of 2, it's probably even smaller on worse systems)
+- You can't open two browser instances of the same profile
+- I suggest using Chrome without profile set or Firefox + uBlock Origin with `check_for_popups` set to `false` (you'll need to make a new profile and specify a path to it)
+- Sometimes there is a long video ad on firefox lasting around 30 seconds, if you don't use adblock I suggest setting `timeout` to 35 or more (timeout doesn't impact efficiency in any way)

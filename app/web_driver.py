@@ -29,7 +29,7 @@ class WebDriverManager:
                 if browser_profile_path:
                     user_data_dir = os.path.dirname(browser_profile_path)
                     profile_dir = os.path.basename(browser_profile_path)
-                    options.add_argument(f"user-data-dir={user_data_dir}")
+                    options.add_argument(f"--user-data-dir={user_data_dir}")
                     options.add_argument(f"--profile-directory={profile_dir}")
                 service = webdriver.ChromeService(ChromeDriverManager().install())
                 self.driver = webdriver.Chrome(service=service, options=options)
@@ -42,10 +42,11 @@ class WebDriverManager:
                 self.driver = webdriver.Firefox(service=service, options=options)
             case "edge":
                 options = webdriver.EdgeOptions()
+                print(options.arguments)
                 if browser_profile_path:
                     user_data_dir = os.path.dirname(browser_profile_path)
                     profile_dir = os.path.basename(browser_profile_path)
-                    options.add_argument(f"user-data-dir={user_data_dir}")
+                    options.add_argument(f"--user-data-dir={user_data_dir}")
                     options.add_argument(f"--profile-directory={profile_dir}")
                 service = webdriver.EdgeService(EdgeChromiumDriverManager().install())
                 self.driver = webdriver.Edge(service=service, options=options)
